@@ -77,6 +77,10 @@ const Signup1 = ({ navigation }) => {
     setFormData({ ...formData, errors });
   };
 
+  function delay(milliseconds) {
+    return new Promise(resolve => setTimeout(resolve, milliseconds));
+  }
+
   const handleSubmit = () => {
     validateForm();
 
@@ -96,9 +100,12 @@ const Signup1 = ({ navigation }) => {
          }
      else{
       formData.gender=genderInput;
+      setTimeout(function() {
+        console.log("Delayed message");
+      }, 2000);
        navigation.navigate('Signup2',{formData});
        console.log(formData)
-       console.log(err);
+      //  console.log(err);
       } 
     })
      .catch(error => {
@@ -109,6 +116,7 @@ const Signup1 = ({ navigation }) => {
    }
     
   };
+ 
 
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
@@ -146,6 +154,7 @@ const Signup1 = ({ navigation }) => {
           style={styles.input1}
           placeholder="Password"
           value={formData.password}
+          secureTextEntry={true}
           onChangeText={(text) =>
             setFormData({ ...formData, password: text })}
         

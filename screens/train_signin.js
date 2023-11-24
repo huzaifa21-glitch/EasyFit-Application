@@ -56,6 +56,9 @@ const TrainerSignin = ({ navigation }) => {
       console.log('Error setting data in AsyncStorage:', error);
     }
   };
+  const back = () =>{
+    navigation.navigate('First');
+  }
 
   const handleSubmit = () => {
     validateForm();
@@ -103,6 +106,9 @@ const TrainerSignin = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <SafeAreaView style={styles.container}>
+    <Pressable onPress={back}>
+        <Image style ={{height:25,width:25 ,marginHorizontal:20,marginVertical:35}} source={require('../assets/home2.png')}></Image>
+      </Pressable>
       <View style={styles.signup}>
         <Text style={styles.title}> Trainer Sign In</Text>
 
@@ -141,10 +147,12 @@ const TrainerSignin = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    // justifyContent: "center",
     // alignItems: "center",
   },
   signup: {
+    // flex:0.5,
+    marginTop:180,
     justifyContent: "center",
     alignItems: "center",
   },

@@ -35,7 +35,7 @@ const win = Dimensions.get("window");
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
       <View style={styles.container}>
         <ImageBackground source={image} resizeMode="cover" style={styles.image}>
-          <Text style={styles.text}> I am signing up as  </Text>
+          <Text style={styles.text}> Sign Up as  </Text>
           
           <View style={styles.buttonContainer}>
           <Pressable style={styles.button} onPress={pressHandler}>

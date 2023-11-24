@@ -24,11 +24,13 @@ const ratio = win.width / 541;
 let globaldata =[]
 var globalusername;
 
+
+
 const Course = ({ navigation }) => {
+
+
   var err=0;
-  const handleSubmit = () => {
-    navigation.navigate("Second");
-  };
+ const [text,setText] = useState("Pay");
  
   const [modalVisible, setModalVisible] = useState(false);
 
@@ -77,7 +79,7 @@ const Course = ({ navigation }) => {
           console.log("NO DATA FOUND "+response.data);
         }
         else{
-          setIsLoading(false);
+          
           // console.log("DATA CUM"+response.data);
           globaldata = [...response.data];
           console.log(globaldata);
@@ -86,7 +88,7 @@ const Course = ({ navigation }) => {
           })
           
          
-          
+          setIsLoading(false);
         }
        
         
@@ -139,6 +141,7 @@ const Course = ({ navigation }) => {
 
   function addchat (sender,receiver)
   {
+    
     // validateForm();
     if(err==0){
     const currentDate = new Date();
@@ -178,12 +181,15 @@ const Course = ({ navigation }) => {
   }
 
 const submitHandle = () =>{
+  
   validateForm();
   const data= { email:globalusername ,
     trainerid: datax.trainerid };
     console.log(data);
-
+    setText("Verifying Transaction...")
   if(err==0){
+
+   
     axios.post('https://amused-handkerchief-seal.cyclic.app/addtopremium', {data} )
     .then(response => {
         // console.log(response);
@@ -195,20 +201,24 @@ const submitHandle = () =>{
     setModalVisible(false);
     // Alert.alert("Course Succesfully Purchased","Chat has been initiated with the trainer! ");
     addchat(globalusername,datax.trainerid);
-    navigation.navigate("Chat");
+    // navigation.navigate("Chat");
 
     
    
 
   }
   else{
+
     console.log(formData.cardNum.length);
     Alert.alert("Enter valid details");
+    setText('Pay')
   }
 }
 const image = {
   uri: datax.pics
 };
+
+console.log(image);
 
 if (isLoading) {
   return (
@@ -274,6 +284,7 @@ if (!isLoading) {
                   style={styles.input3}
                   placeholder="CVC"
                   keyboardType="numeric"
+                  secureTextEntry={true}
                   value={formData.cvc}
                   onChangeText={(text) =>
                     setFormData({ ...formData, cvc: text })
@@ -288,7 +299,7 @@ if (!isLoading) {
                )} 
               <View style={styles.buttonDisplay}>
                 <Pressable style={styles.modalButton} onPress={submitHandle}>
-                  <Text style={styles.modalbuttonText}>Pay</Text>
+                  <Text style={styles.modalbuttonText}>{text}</Text>
                 </Pressable>
               </View>
             </View>
@@ -508,7 +519,7 @@ const styles = StyleSheet.create({
     borderRadius: 6,
     borderColor: "#161416",
     borderWidth: 2,
-    width: 150,
+    width: 350,
     elevation: 3,
     backgroundColor: "#161416",
     marginBottom: 20,

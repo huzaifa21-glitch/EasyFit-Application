@@ -98,27 +98,28 @@ const TrainerSignup2 = ({ navigation }) => {
   const [selected, setSelected] = React.useState("");
   const [error, setError] = useState("");
 
-  const [text, settext] = useState("");
+  const [text, settext] = useState("Submit");
   const [textvid, settextvid] = useState("");
   const [mytext, setmytext] = useState("Pictures");
 
   const [mytext1, setmytext1] = useState("Profile Picture");
   const [mytext2, setmytext2] = useState("Video");
 
-  const validateForm = () => {
-    if (mytext == "Pictures") {
-      // setError('Please select an option');
-      err = err + 1;
-    }
-    if (mytext1 == "Profile Picture") {
-      // setError('Please select an option');
-      err = err + 1;
-    }
-    if (mytext2 == "Video") {
-      // setError('Please select an option');
-      err = err + 1;
-    }
-  };
+
+  // const validateForm = () => {
+  //   if (mytext == "Pictures") {
+  //     // setError('Please select an option');
+  //     err = err + 1;
+  //   }
+  //   if (mytext1 == "Profile Picture") {
+  //     // setError('Please select an option');
+  //     err = err + 1;
+  //   }
+  //   if (mytext2 == "Video") {
+  //     // setError('Please select an option');
+  //     err = err + 1;
+  //   }
+  // };
 
   
 
@@ -310,7 +311,7 @@ const TrainerSignup2 = ({ navigation }) => {
       });
   };
   const handleSubmit = () => {
-    validateForm();
+    // validateForm();
     if (err == 0) {
       const TsignupData = {
         name: s1name,
@@ -325,6 +326,7 @@ const TrainerSignup2 = ({ navigation }) => {
       };
       // navigation.navigate("TrainerSignin", { TsignupData });
       // console.log(TsignupData);
+      settext("Creating Profile...")
       axios
         .post("https://amused-handkerchief-seal.cyclic.app/addtrainerdetails", { TsignupData })
         .then((response) => {
@@ -335,12 +337,13 @@ const TrainerSignup2 = ({ navigation }) => {
         })
         .catch((error) => {
           console.log(error);
+          settext("Submit");
         });
       const data = { email: TsignupData.email, password: TsignupData.password };
 
       //  ADDING LOGIN CREDENTIALS ON SIGN UP
       axios
-        .post("https://amused-handkerchief-seal.cyclic.app/addtologin", { data })
+        .post("https://amused-handkerchief-seal.cyclic.app/Traineraddtologin", { data })
         .then((response) => {
           // console.log(response);
           console.log(data);
@@ -394,7 +397,7 @@ const TrainerSignup2 = ({ navigation }) => {
 
           <View style={styles.buttonDisplay}>
             <Pressable style={styles.submitButton} onPress={handleSubmit}>
-              <Text style={styles.buttonText}>Submit</Text>
+              <Text style={styles.buttonText}>{text}</Text>
             </Pressable>
           </View>
         </View>

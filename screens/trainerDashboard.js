@@ -13,142 +13,115 @@ import {
   Modal,
   ScrollView,
   ActivityIndicator,
-  Alert
+  Alert,
 } from "react-native";
 import ImageZoom from "react-native-image-pan-zoom";
 import { Video, ResizeMode } from "expo-av";
 import ImgCard from "../components/imageCard";
-import axios from 'axios';
+import axios from "axios";
 import { useRoute } from "@react-navigation/native";
 import Vidplay from "../components/videoplay";
-
 
 var fullWidth = Dimensions.get("window").width;
 var fullheight = Dimensions.get("window").height;
 
-let globaldata=[];
-let imagedata=[];
+let globaldata = [];
+let imagedata = [];
 
 const TrainerDash = ({ navigation }) => {
-
-  const [datax, setData] = useState(
-    {
-  
-    }
-  );
+  const [datax, setData] = useState({});
   const [isLoading, setIsLoading] = useState(true);
- 
-  const route = useRoute()
-  const formdata = route.params.data1.trainerid
+
+  const route = useRoute();
+  const formdata = route.params.data1.trainerid;
   // console.log('trainer id:'+formdata);
 
-
-  React.useEffect(() => {  
-
+  React.useEffect(() => {
     console.log(formdata);
-    
-    axios.post('https://amused-handkerchief-seal.cyclic.app/trainerdetails',{formdata},{maxContentLength: 1000000})
-    .then(response => {
-   
-        if(response.data=="0")
-        {
+
+    axios
+      .post(
+        "https://amused-handkerchief-seal.cyclic.app/trainerdetails",
+        { formdata },
+        { maxContentLength: 1000000 }
+      )
+      .then((response) => {
+        if (response.data == "0") {
           setIsLoading(false);
-          Alert.alert("Error!","Try Again Later!")
-          console.log("NO DATA FOUND "+response.data);
-        }
-        else{
+          Alert.alert("Error!", "Try Again Later!");
+          console.log("NO DATA FOUND " + response.data);
+        } else {
           setIsLoading(false);
           // console.log("DATA CUM"+response.data);
           globaldata = [...response.data];
 
           // globaldata = globaldata.split(",");
-          imagedata=globaldata[0].pictures.split(",");
+          imagedata = globaldata[0].pictures.split(",");
           console.log(imagedata);
 
           console.log(globaldata);
           setData({
-            ...globaldata[0]
-          })
-          
-         
-          
+            ...globaldata[0],
+          });
         }
-       
-        
-    })
-    .catch(error => {
-      setIsLoading(false);
-      Alert.alert("Network Error")
+      })
+      .catch((error) => {
+        setIsLoading(false);
+        Alert.alert("Network Error");
         console.log(error);
-  });
-  
-}, []);
- 
-  const handleSubmit = () => {
-    navigation.navigate("Second");
-  };
-  const goFullScreen = () => {
-    if (videoPlayer.current) {
-      videoPlayer.current.presentFullscreenPlayer();
-    }
-  };
-  const [modalVisible, setModalVisible] = useState(false);
-  const video = React.useRef(null);
-  const [status, setStatus] = React.useState({});
+      });
+  }, []);
+
 
   if (isLoading) {
     return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
+      <View style={{ flex: 1, justifyContent: "center", alignItems: "center" }}>
         <ActivityIndicator size="large" color="#0000ff" />
       </View>
     );
   }
 
   if (!isLoading) {
-
-  return (
-    <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-      <SafeAreaView style={styles.container}>
-        <ScrollView>
-          <View style={styles.header}>
-          <Vidplay sourceUri={ datax.video} />  
-          </View>
-          <View style={styles.display}>
-            <Image
-              style={styles.image1}
-              source={{
-                uri:  datax.profilepic
-              }}
-            ></Image>
-            <View style={styles.nameContainer}>
-              <Text style={styles.title}>{datax.name}</Text>
-              {datax.verified ? (<View style={styles.verify}>
-                <Image
-                  style={styles.icon}
-                  source={require("../assets/verify.png")}
-                ></Image>
-                <Text style={styles.verifyTitle}>Certified</Text>
-              </View>):null}
+    return (
+      <ScrollView style={{backgroundColor:'#161416'}}>
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <SafeAreaView style={styles.container}>
+            <View style={styles.header}>
+              <Vidplay sourceUri={datax.video} />
             </View>
-          </View>
-          <Text style={styles.Abouttitle}>About</Text>
-          <View style={styles.display3}>
-            <Text style={styles.descText}>
-              {datax.description}
-            </Text>
-          </View>
-          <View style={styles.picture}>
-           
-          {imagedata.map( item =>(
-      <ImgCard key={item.name} data={item} navigation={navigation}/>
-        ))}
-
-           
-          </View>
-        </ScrollView>
-      </SafeAreaView>
-    </TouchableWithoutFeedback>
-  );
+            <View style={styles.display}>
+              <Image
+                style={styles.image1}
+                source={{
+                  uri: datax.profilepic,
+                }}
+              ></Image>
+              <View style={styles.nameContainer}>
+                <Text style={styles.title}>{datax.name}</Text>
+                {datax.verified ? (
+                  <View style={styles.verify}>
+                    <Image
+                      style={styles.icon}
+                      source={require("../assets/verify.png")}
+                    ></Image>
+                    <Text style={styles.verifyTitle}>Certified</Text>
+                  </View>
+                ) : null}
+              </View>
+            </View>
+            <Text style={styles.Abouttitle}>About</Text>
+            <View style={styles.display3}>
+              <Text style={styles.descText}>{datax.description}</Text>
+            </View>
+            <View style={styles.picture}>
+              {imagedata.map((item) => (
+                <ImgCard key={item.name} data={item} navigation={navigation} />
+              ))}
+            </View>
+          </SafeAreaView>
+        </TouchableWithoutFeedback>
+      </ScrollView>
+    );
   }
 };
 const styles = StyleSheet.create({
@@ -223,7 +196,7 @@ const styles = StyleSheet.create({
     color: "#ddd",
     marginHorizontal: 15,
     fontSize: 14,
-    fontWeight: 300,
+    fontWeight: "300",
     marginBottom: 20,
     // marginTop:20
   },
@@ -253,7 +226,7 @@ const styles = StyleSheet.create({
 
     // borderRadius: 100,
   },
-  video:{
+  video: {
     width: fullWidth * 0.95,
     height: 300,
     marginHorizontal: 10,

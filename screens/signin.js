@@ -57,6 +57,9 @@ const Signin = ({ navigation }) => {
     }
   };
   
+  const back = () =>{
+    navigation.navigate('First');
+  }
 
   const handleSubmit = () => {
     validateForm();
@@ -109,6 +112,9 @@ const Signin = ({ navigation }) => {
   return (
     <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
     <SafeAreaView style={styles.container}>
+      <Pressable>
+        <Image style ={{height:25,width:25 ,marginHorizontal:20,marginVertical:35}} source={require('../assets/home2.png')}></Image>
+      </Pressable>
       <View style={styles.signup}>
         <Text style={styles.title}>User Sign In</Text>
 
@@ -147,10 +153,12 @@ const Signin = ({ navigation }) => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    justifyContent: "center",
+    // justifyContent: "center",
     // alignItems: "center",
   },
   signup: {
+    // flex:0.5,
+    marginTop:180,
     justifyContent: "center",
     alignItems: "center",
   },

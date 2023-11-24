@@ -15,10 +15,8 @@ import {
   Pressable,
   Button,
 } from "react-native";
-// import Icon from "react-native-vector-icons/MaterialCommunityIcons";
-// import MaterialIconTextButtonsFooter from "../components/MaterialIconTextButtonsFooter";
-// import MaterialCardWithImageAndTitle2 from "./MaterialCardWithImageAndTitle2";
-import { MaterialCommunityIcons } from "react-native-vector-icons";
+import { useIsFocused } from "@react-navigation/native";
+
 import ProfileCard from "../components/MaterialCardWithImageAndTitle2";
 // import MaterialCard2 from "../components/card";
 import Icon from "react-native-vector-icons/FontAwesome";
@@ -41,7 +39,7 @@ var err = 0;
 
 export default function Train_dash(props) {
 
- 
+  const isFocused = useIsFocused();
   const [isLoading, setIsLoading] = useState(true);
   const [newc, setnewc] = useState(1);
   
@@ -49,6 +47,7 @@ export default function Train_dash(props) {
   
   
   useEffect(() => {
+    // if (isFocused) {
   const getDataFromScreenA = async () => {
     try {
      
@@ -127,13 +126,14 @@ export default function Train_dash(props) {
     
 });
 
+    // }
 
 }, []);
 
 useEffect(() => {
 
   
-
+  //  if (isFocused) {
   axios.post("https://amused-handkerchief-seal.cyclic.app/loadcourses", { id })
   .then((response) => {
     if(response.data=='0')
@@ -158,7 +158,7 @@ useEffect(() => {
     });
   
 
-
+  // }
 }, [newc]);
 
   
@@ -179,6 +179,31 @@ useEffect(() => {
 
       .then((response) => {
         if (response.data) {
+
+          axios.post("https://amused-handkerchief-seal.cyclic.app/loadcourses", { id })
+    .then((response) => {
+      if(response.data=='0')
+      {
+       console.log("NO COURSES AVAIABLE  ");
+       globaldata=[];
+        setIsLoading(false)
+        newx=1;
+      }
+      else{
+       
+        console.log("use : "+globaldata);
+        globaldata=[...response.data]
+        globaldata=globaldata.reverse();
+        //  console.log("DATaxxxxx: "+globaldata[2].coursetitle+"  "+globaldata[0].duration);
+        // console.log(JSON.stringify(globaldata[0]));
+        setIsLoading(false);
+      }
+      })
+    
+      .catch((error) => {
+        alert(error);
+        setIsLoading(false);
+      });
           alert("Course Removed Sucessfully");
          
           // RNRestart.Restart();
@@ -395,12 +420,12 @@ useEffect(() => {
             onPress={() => {
               setshow({
                 ct: data.globaldata.coursetitle,
-    link: data.globaldata.pics,
-    type: data.globaldata.type,
-    duration: data.globaldata.duration,
-    fees: data.globaldata.fee,
-    weights: data.globaldata.weights,
-    desc: data.globaldata.description,
+                link: data.globaldata.pics,
+                type: data.globaldata.type,
+                duration: data.globaldata.duration,
+                fees: data.globaldata.fee,
+                weights: data.globaldata.weights,
+                desc: data.globaldata.description,
 
 
 
@@ -522,12 +547,39 @@ useEffect(() => {
           setWeights('');
          setmodalvisibleadd(false)
          
-          Alert.alert("Success!","COURSE ADDED SUCESSFULLY");
+          
          
           setnewc(newc+1)
           links = "";
 
+          axios.post("https://amused-handkerchief-seal.cyclic.app/loadcourses", { id })
+    .then((response) => {
+      if(response.data=='0')
+      {
+       console.log("NO COURSES AVAIABLE  ");
+       globaldata=[];
+        setIsLoading(false)
+        newx=1;
+      }
+      
+      else{
+       
+        console.log("use : "+globaldata);
+        globaldata=[...response.data]
+        globaldata=globaldata.reverse();
+        //  console.log("DATaxxxxx: "+globaldata[2].coursetitle+"  "+globaldata[0].duration);
+        // console.log(JSON.stringify(globaldata[0]));
+        setIsLoading(false);
+      }
+      Alert.alert("Success!","COURSE ADDED SUCESSFULLY");
+      })
 
+      
+    
+      .catch((error) => {
+        alert(error);
+        setIsLoading(false);
+      });
 
 
 
@@ -679,8 +731,10 @@ setimageurl(data.url);
       </View>
     );
   }
+  // if (isFocused) {
 if(globaldata.length<1 && newx==0)
 {
+  
   setIsLoading(true) 
   axios.post("https://amused-handkerchief-seal.cyclic.app/loadcourses", { id })
   .then((response) => {
@@ -697,18 +751,20 @@ if(globaldata.length<1 && newx==0)
       // console.log(JSON.stringify(globaldata[0]));
       setIsLoading(false);
     }
+  
     })
     .catch((error) => {
       alert(error);
       setIsLoading(false);
     });
 }
+  // }
 // if(iduser==null )
 // {
 // setnewc(newc+1)
 //   setIsLoading(true)
 // }
-console.log("ID USER BEFROE RETIRN IS "+iduser);
+// console.log("ID USER BEFROE RETIRN IS "+iduser);
   return (
       <View style={styles.container}>
         {/* PROFILE CARD */}
@@ -1116,19 +1172,20 @@ alignSelf:'center',
   },
   actionBody: {
     padding: 12,
-    marginLeft: 80,
-    marginRight: 80,
+    marginHorizontal:10,
     flexDirection: "row",
-    alignItems: "center",
+    alignItems:"flex-start",
+    // justifyContent:'center'
   },
   actionButton1: {
     padding: 0,
-    height: 40,
+    height: 35,
     // width:90,
     justifyContent: "center",
     color: "#FFFFFF",
     fontSize: 15,
   },
+
   actionButton2: {
     padding: 0,
     height: 35,

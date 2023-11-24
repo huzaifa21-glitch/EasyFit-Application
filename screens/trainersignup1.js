@@ -20,6 +20,8 @@ const TrainerSignup1 = ({ navigation }) => {
   const [selected, setSelected] = React.useState("");
   const [error, setError] = useState('');
 
+  const[text,setText]=useState("Contine")
+
   const data = [
     { key: "1", value: "Male" },
     { key: "2", value: "Female" },
@@ -65,6 +67,10 @@ const TrainerSignup1 = ({ navigation }) => {
       errors.phone = 'Phone number is required';
       err=err+1;
     }
+    if (!formData.description) {
+      errors.phone = 'Description is required';
+      err=err+1;
+    }
     if (!formData.password) {
       errors.password = "Password is required";
       err = err + 1;
@@ -76,24 +82,45 @@ const TrainerSignup1 = ({ navigation }) => {
   };
 
   const handleSubmit = () => {
-    // validateForm();
+    validateForm();
     const data1={
       'email':formData.email,
     }
     if (err == 0) {
 
-       axios.post('https://amused-handkerchief-seal.cyclic.app/userSignupdemail', {data1} )
+      setText("Loading...")
+
+      axios.post('https://amused-handkerchief-seal.cyclic.app/userSignupdemail', {data1} )
       .then(response => {
         if(response.data=='1')
      {
     alert("Email is Already Taken")
     console.log(response.data);
+    setText("Contine")
          }
+        })
+         .catch(error => {
+             console.log(error);
+         });
+      
+
+       axios.post('https://amused-handkerchief-seal.cyclic.app/TuserSignupdemail', {data1} )
+      .then(response => {
+        if(response.data=='1')
+     {
+    alert("Email is Already Taken")
+    console.log(response.data);
+    setText("Contine")
+         }
+      
      else{
       formData.gender=genderInput;
+      setTimeout(function() {
+        console.log("Delayed message");
+      }, 2000);
        navigation.navigate('TrainerSignup2',{formData});
        console.log(formData)
-       console.log(err);
+      //  console.log(err);
        } 
       })
        .catch(error => {
@@ -144,6 +171,7 @@ const TrainerSignup1 = ({ navigation }) => {
           style={styles.input1}
           placeholder="Password"
           value={formData.password}
+          secureTextEntry={true}
           onChangeText={(text) =>
             setFormData({ ...formData, password: text })}
         
@@ -181,7 +209,7 @@ const TrainerSignup1 = ({ navigation }) => {
               style={styles.submitButton}
               onPress={handleSubmit}
             >
-              <Text style={styles.buttonText}>Continue</Text>
+              <Text style={styles.buttonText}>{text}</Text>
             </Pressable>
           </View>
     </SafeAreaView>

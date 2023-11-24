@@ -9,8 +9,10 @@ import {
   Pressable,
   StyleSheet,
   SafeAreaView,
+  Dimensions
 } from "react-native";
 import { Globalstyles } from "../styles/global";
+const { width, height } = Dimensions.get('window');
 
 export default function First({ navigation }) {
 
@@ -25,7 +27,7 @@ export default function First({ navigation }) {
     });
   }, [navigation]);
   
-
+ 
   const handleSubmit = () => {
     navigation.navigate("Second");
   };
@@ -43,8 +45,8 @@ export default function First({ navigation }) {
           <Text style={styles.text}> Welcome To EasyFit</Text>
           <Text style={styles.text1}>
             {" "}
-            The first fitness App Improve your fitness,{"\n"} practice mindfulness, or 
-            prepare for new{"\n"} adventures with a series of specially designed{"\n"}
+            The first fitness App Improve your fitness, practice mindfulness, or 
+            prepare for new adventures with a series of specially designed
             workouts and meditations.
           </Text>
 
@@ -75,8 +77,8 @@ const styles = StyleSheet.create({
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "center",
-    width: "100%",
-    height:'100%'
+    width: width,
+    height: '100%',
   },
   text: {
     color: "white",
